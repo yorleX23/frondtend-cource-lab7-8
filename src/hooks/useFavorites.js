@@ -1,28 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { FavoritesContext } from '../store/FavoritesContext';
 
 export function useFavorites() {
-  // Зберігати улюблені елементи в localStorage[cite: 1]
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('hike_favorites');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem('hike_favorites', JSON.stringify(favorites));
-  }, [favorites]);
-
-  const toggleFavorite = (item) => {
-    setFavorites(prev => {
-      const isFav = prev.find(fav => fav.id === item.id);
-      if (isFav) {
-        return prev.filter(fav => fav.id !== item.id);
-      } else {
-        return [...prev, item];
-      }
-    });
-  };
-
-  const isFavorite = (id) => favorites.some(fav => fav.id === id);
-
-  return { favorites, toggleFavorite, isFavorite };
+  const context = useContext(FavoritesContext);
+  
+  if (!context) {
+    throw new Error('useFavorites must be used within a FavoritesProvider');
+  }
+  
+  return context;
 }
