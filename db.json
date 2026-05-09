@@ -1,0 +1,26 @@
+{
+  "inventory": [
+    {
+      "id": "1",
+      "inventory_name": "Намет Pinguin Tornado 3",
+      "description": "Надійний тримісний намет для гірських походів.",
+      "quantity": 12,
+      "photoUrl": "https://images.unsplash.com/photo-1504280390227-31dc240a5f78?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "2",
+      "inventory_name": "Трекінгові палиці Leki",
+      "description": "Міцні алюмінієві палиці для безпечних спусків.",
+      "quantity": 5,
+      "photoUrl": "https://images.unsplash.com/photo-1515555230216-82228b4e6eb8?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "inventory_name": "Рюкзак",
+      "description": "2кг",
+      "quantity": 2,
+      "photoUrl": "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?q=80&w=800&auto=format&fit=crop",
+      "id": "NJm0NUNIO-w"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
