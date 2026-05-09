@@ -1,61 +1,86 @@
-const API_URL = 'http://localhost:3000'; // Прибрали /api
+// Ключ для збереження даних у локальній пам'яті браузера
+const STORAGE_KEY = 'hikeshop_inventory';
+
+// Якщо склад порожній, дамо один базовий товар для краси
+const getItems = () => {
+  const items = localStorage.getItem(STORAGE_KEY);
+  return items ? JSON.parse(items) : [
+    {
+      id: "1",
+      inventory_name: "Намет Pinguin Tornado 3",
+      description: "Надійний тримісний намет для гірських походів.",
+      quantity: 12,
+      photoUrl: "https://images.unsplash.com/photo-1504280390227-31dc240a5f78?q=80&w=800&auto=format&fit=crop"
+    }
+  ];
+};
+
+const saveItems = (items) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+};
 
 export const inventoryApi = {
   // Отримання всього інвентарю
   getAll: async () => {
-    const res = await fetch(`${API_URL}/inventory`);
-    if (!res.ok) throw new Error('Помилка завантаження');
-    return res.json();
+    return getItems();
   },
 
-  // Отримання деталей 
+  // Отримання деталей
   getById: async (id) => {
-    const res = await fetch(`${API_URL}/inventory/${id}`);
-    if (!res.ok) throw new Error('Помилка завантаження деталей');
-    return res.json();
+    return getItems().find(item => item.id === id);
   },
 
-  // Створення (Адаптовано під json-server)
+  // СТВОРЕННЯ: Приймає FormData з файлом!
   create: async (formData) => {
-    // Оскільки json-server не розуміє FormData, ми витягуємо дані і робимо з них звичайний JSON
+    const items = getItems();
+    
+    // Витягуємо файл фотографії з FormData
+    const photoFile = formData.get('photo');
+    
+    // МАГІЯ: створюємо тимчасове посилання на файл з твого комп'ютера
+    const photoUrl = photoFile 
+      ? URL.createObjectURL(photoFile) 
+      : 'https://via.placeholder.com/400?text=No+Image';
+
     const newItem = {
+      id: Date.now().toString(),
       inventory_name: formData.get('inventory_name'),
       description: formData.get('description'),
       quantity: Number(formData.get('quantity')),
-      // Ставимо картинку-заглушку, бо реальний файл json-server не збереже
-      photoUrl: "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?q=80&w=800&auto=format&fit=crop" 
+      photoUrl: photoUrl // Зберігаємо посилання на картинку
     };
 
-    const res = await fetch(`${API_URL}/inventory`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newItem),
-    });
-    return res.json();
+    items.push(newItem);
+    saveItems(items);
+    return newItem;
   },
 
-  // Оновлення текстових даних
+  // РЕДАГУВАННЯ ТЕКСТУ: Приймає звичайний JSON (як вимагає методичка)
   updateText: async (id, data) => {
-    const res = await fetch(`${API_URL}/inventory/${id}`, {
-      method: 'PATCH', // Використовуємо PATCH для часткового оновлення в json-server
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return res.json();
-  },
-
-  // Оновлення фото (Адаптовано під json-server)
-  updatePhoto: async (id, photoFile) => {
-    // Просто імітуємо успішне оновлення, оскільки json-server не вміє зберігати файли
-    console.log("Імітація завантаження фото для ID:", id);
+    let items = getItems();
+    items = items.map(item => item.id === id ? { ...item, ...data } : item);
+    saveItems(items);
     return { success: true };
   },
 
-  // Видалення
+  // РЕДАГУВАННЯ ФОТО: Отримує файл і оновлює картинку
+  updatePhoto: async (id, photoFile) => {
+    let items = getItems();
+    
+    if (photoFile) {
+      // Створюємо нове посилання для нового фото
+      const photoUrl = URL.createObjectURL(photoFile);
+      items = items.map(item => item.id === id ? { ...item, photoUrl } : item);
+      saveItems(items);
+    }
+    return { success: true };
+  },
+
+  // ВИДАЛЕННЯ
   delete: async (id) => {
-    const res = await fetch(`${API_URL}/inventory/${id}`, {
-      method: 'DELETE',
-    });
-    return res.json();
+    let items = getItems();
+    items = items.filter(item => item.id !== id);
+    saveItems(items);
+    return { success: true };
   }
 };
