@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { inventoryApi } from '../services/inventoryApi';
 import ConfirmModal from '../components/ConfirmModal';
 import InventoryForm from '../components/inventory/InventoryForm';
-
-// ... імпорти залишаються ті самі ...
+import InventoryQuickView from '../components/gallery/InventoryQuickView';
 
 export default function AdminInventory() {
   const [items, setItems] = useState([]);
@@ -12,8 +11,7 @@ export default function AdminInventory() {
   
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null); // НОВИЙ СТАН для редагування
-
-  // ... useEffect і loadInventory, handleDelete залишаються без змін ...
+  const [viewItem, setViewItem] = useState(null); // Стан для перегляду деталей
 
   useEffect(() => {
     loadInventory();
@@ -81,8 +79,15 @@ export default function AdminInventory() {
                     {item.quantity} шт.
                   </span>
                 </td>
-                {/* Кнопка РЕДАГУВАТИ в кожному рядку */}
+                
+                {/* КНОПКИ ДІЙ (Додано кнопку Переглянути) */}
                 <td className="p-4 flex gap-3 mt-4">
+                  <button 
+                    onClick={() => setViewItem(item)} 
+                    className="text-green-600 hover:text-green-800 font-medium transition"
+                  >
+                    Переглянути
+                  </button>
                   <button 
                     onClick={() => {
                       setEditingItem(item); // Передаємо поточний товар у форму
@@ -112,7 +117,15 @@ export default function AdminInventory() {
         />
       )}
 
-      {/* Модалка з формою додавання */}
+      {/* Модалка ПЕРЕГЛЯДУ */}
+      {viewItem && (
+        <InventoryQuickView 
+          item={viewItem} 
+          onClose={() => setViewItem(null)} 
+        />
+      )}
+
+      {/* Модалка з формою додавання/редагування */}
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden">
