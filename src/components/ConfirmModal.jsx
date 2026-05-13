@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ConfirmModal({ onConfirm, onCancel, message }) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4">
       <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
         <p className="text-lg text-gray-800 mb-6">{message}</p>
         <div className="flex justify-end gap-4">
