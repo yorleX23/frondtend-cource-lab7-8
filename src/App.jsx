@@ -5,8 +5,7 @@ import Favorites from './pages/Favorites';
 
 function App() {
   return (
-    // Додали selection:bg-blue-200 (красиве виділення тексту мишкою)
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-blue-200 selection:text-blue-900">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-blue-200 selection:text-blue-900 overflow-x-hidden w-full">
       
       {/* СУЧАСНИЙ NAVBAR: фіксований зверху (sticky), ефект скла (backdrop-blur) */}
       <nav className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-700 shadow-lg">

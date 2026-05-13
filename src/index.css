@@ -6,31 +6,29 @@ html {
 }
 
 /* --- КАСТОМНИЙ СКРОЛЛБАР --- */
-/* Робить сайт візуально дорожчим, прибираючи грубу стандартну смугу браузера */
 ::-webkit-scrollbar {
-  width: 8px; /* Тонша смуга */
+  width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f8fafc; /* Дуже світлий фон */
+  background: #f8fafc;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* Приємний сірий колір */
-  border-radius: 10px; /* Закруглені краї */
+  background: #cbd5e1;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; /* Темніє при наведенні */
+  background: #94a3b8;
 }
 
 /* --- АНІМАЦІЯ ПОЯВИ СТОРІНОК --- */
 @keyframes fadeIn {
   from { 
     opacity: 0; 
-    transform: translateY(15px); 
+    /* Прибрали transform, щоб модалки не ламалися! */
   }
   to { 
     opacity: 1; 
-    transform: translateY(0); 
   }
 }
 
